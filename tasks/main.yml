@@ -4,6 +4,7 @@
     that:
       - ipa_domain is defined and ipa_domain is string and ipa_domain != ''
       - ipa_client_hostname is defined and ipa_client_hostname is string and ipa_client_hostname != ''
+      - ipa_server_hostname is defined and ipa_server_hostname is string and ipa_server_hostname != ''
       - ipa_admin_username is defined and ipa_admin_username is string and ipa_admin_username != ''
       - ipa_admin_password is defined and ipa_admin_password is string and ipa_admin_password != ''
     fail_msg: "Input validation failed. See README.md for information on required inputs and their format."
@@ -44,3 +45,40 @@
   when: ipa_client_check is succeeded and kinit_result is succeeded
   changed_when: false
   ignore_errors: true
+
+- name: Set disenrollment method
+  ansible.builtin.set_fact:
+    use_curl: "{{ ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '24' }}"
+
+- name: Delete IPA host and DNS record via ipa_host module (preferred)
+  community.general.ipa_host:
+    fqdn: "{{ ipa_client_hostname }}.{{ ipa_domain }}"
+    ip_address: "{{ ansible_default_ipv4.address }}"
+    state: absent
+    update_dns: true
+    ipa_host: "{{ ipa_server_hostname }}"
+    ipa_user: "{{ ipa_admin_username }}"
+    ipa_pass: "{{ ipa_admin_password }}"
+    validate_certs: false
+  when: not use_curl and ipa_host_check is succeeded
+
+- name: Delete IPA host and DNS record via IPA server API (fallback for Ubuntu 24)
+  ansible.builtin.uri:
+    url: "https://{{ ipa_server_hostname }}/ipa/session/json"
+    method: POST
+    user: "{{ ipa_admin_username }}"
+    password: "{{ ipa_admin_password }}"
+    headers:
+      Referer: "https://{{ ipa_server_hostname }}/ipa"
+      Content-Type: application/json
+      Accept: application/json
+    body_format: json
+    body:
+      method: host_del
+      params:
+        - ["{{ ipa_client_hostname }}"]
+        - force: true
+          updatedns: true
+    validate_certs: false
+  register: curl_host_del
+  when: use_curl and ipa_host_check is succeeded
