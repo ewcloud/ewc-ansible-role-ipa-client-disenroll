@@ -82,7 +82,7 @@ ansible-playbook -i inventory.yml playbook.yml
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
-| ipa_domain | The IPA domain name. Example: `<memberstate>-<organization>-<projectname>.ewc`. | `string` | n/a | yes |
+| ipa_domain | The IPA domain name. Example: `<memberstate>-<organization>-<projectname>.ewc` | `string` | n/a | yes |
 | ipa_client_hostname | IPA client host name. Example: `<openstack instance name>` | `string` | n/a | yes |
 | ipa_server_hostname | IPA server host name. Example: `ldap`| `string` | n/a | yes |
 | ipa_admin_username  | IPA Directory Manager/Admin username | `string` | n/a | yes |
@@ -90,11 +90,14 @@ ansible-playbook -i inventory.yml playbook.yml
 
 
 ## Final Environment
-> 💡 Only configuration changes on pre-install packages. No new dependencies are installed
-in the final environment.
+> 💡 No new dependencies are installed in the final environment. Only configuration
+changes on pre-install packages.
 
-Applying this template will trigger a configuration change the IPA server against
-in which the IPA client, running in your target host, was previously registered.
+Applying this template will trigger a configuration change on the IPA server against
+which the IPA client (i.e. your target host), was previously registered.
+Upon successful completion, users will no longer be able to use LDAP credentials to
+access the target host, nor will its previous FQDN be resolvable by other hosts in
+the subnet.
 
 ## Changelog
 All notable changes (i.e. fixes, features and breaking changes) are documented 
