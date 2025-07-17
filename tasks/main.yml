@@ -62,6 +62,18 @@
     validate_certs: false
   when: not use_curl and ipa_host_check is succeeded
 
+- name: Delete only IPA host via ipa_host module (preferred)
+  community.general.ipa_host:
+    fqdn: "{{ ipa_client_hostname }}.{{ ipa_domain }}"
+    ip_address: "{{ ansible_default_ipv4.address }}"
+    state: absent
+    update_dns: true
+    ipa_host: "{{ ipa_server_hostname }}"
+    ipa_user: "{{ ipa_admin_username }}"
+    ipa_pass: "{{ ipa_admin_password }}"
+    validate_certs: false
+  when: not use_curl and ipa_host_check is failed
+
 - name: Delete IPA host and DNS record via IPA server API (fallback for Ubuntu 24)
   ansible.builtin.uri:
     url: "https://{{ ipa_server_hostname }}/ipa/session/json"
@@ -82,3 +94,23 @@
     validate_certs: false
   register: curl_host_del
   when: use_curl and ipa_host_check is succeeded
+
+- name: Delete only IPA host via IPA server API (fallback for Ubuntu 24)
+  ansible.builtin.uri:
+    url: "https://{{ ipa_server_hostname }}/ipa/session/json"
+    method: POST
+    user: "{{ ipa_admin_username }}"
+    password: "{{ ipa_admin_password }}"
+    headers:
+      Referer: "https://{{ ipa_server_hostname }}/ipa"
+      Content-Type: application/json
+      Accept: application/json
+    body_format: json
+    body:
+      method: host_del
+      params:
+        - ["{{ ipa_client_hostname }}"]
+        - force: true
+    validate_certs: false
+  register: curl_host_del
+  when: use_curl and ipa_host_check is failed
