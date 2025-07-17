@@ -17,6 +17,12 @@ The template is designed to run on a virtual machine, running an IPA client prev
 See the [LICENSE](./LICENSE) file for licensing information as it pertains to
 files in this repository.
 
+## Authentication
+
+Before proceeding, if you lack OpenStack Application Credentials or do not know
+how to make them available to Ansible in your development environment, make sure
+to check out the [EWC documentation](https://confluence.ecmwf.int/display/EWCLOUDKB/EWC+-+How+to+request+Openstack+Application+Credentials).
+
 ## Usage
 
 The step-by-step described below assume your local file system follows the 
@@ -24,7 +30,8 @@ example structure below, with `ewc-ansible-role-ipa-client-disenroll` being a cl
 repository:
 ```
 .
-├── ewc-ansible-role-ipa-client-disenroll
+├── roles
+│   └──  ewc-ansible-role-ipa-client-disenroll
 ├── inventory.yml
 └── playbook.yml
 ```
