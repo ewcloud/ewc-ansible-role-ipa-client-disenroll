@@ -1,4 +1,14 @@
 ---
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - ipa_domain is defined and ipa_domain is string and ipa_domain != ''
+      - ipa_client_hostname is defined and ipa_client_hostname is string and ipa_client_hostname != ''
+      - ipa_admin_username is defined and ipa_admin_username is string and ipa_admin_username != ''
+      - ipa_admin_password is defined and ipa_admin_password is string and ipa_admin_password != ''
+    fail_msg: "Input validation failed. See README.md for information on required inputs and their format."
+    success_msg: "User input configuration is valid."
+
 - name: Verify supported distributions
   ansible.builtin.assert:
     that:
@@ -6,3 +16,31 @@
         (ansible_distribution == "Ubuntu" and ansible_distribution_major_version in ["22", "24"])
     fail_msg: "Only RockyLinux 8/9 and Ubuntu 22/24 are supported. Detected: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_major_version'] }}."
     success_msg: "Running supported {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_major_version'] }} distribution."
+
+- name: Check if ipa-client is installed
+  ansible.builtin.command:
+    argv:
+      - ipa
+      - --version
+  register: ipa_client_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Authenticate as IPA admin with Kerberos
+  ansible.builtin.command:
+    cmd: bash -c "echo '{{ ipa_admin_password }}' | kinit {{ ipa_admin_username }}"
+  register: kinit_result
+  changed_when: false
+  ignore_errors: true
+
+- name: Check if host is enrolled in IPA
+  ansible.builtin.command:
+    argv:
+      - ipa
+      - host-find
+      - "{{ ipa_client_hostname }}.{{ ipa_domain }}"
+      - --pkey-only
+  register: ipa_host_check
+  when: ipa_client_check is succeeded and kinit_result is succeeded
+  changed_when: false
+  ignore_errors: true
