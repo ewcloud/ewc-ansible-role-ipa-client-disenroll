@@ -56,7 +56,7 @@
     ip_address: "{{ ansible_default_ipv4.address }}"
     state: absent
     update_dns: true
-    ipa_host: "{{ ipa_server_hostname }}"
+    ipa_host: "{{ ipa_server_hostname }}.{{ ipa_domain }}"
     ipa_user: "{{ ipa_admin_username }}"
     ipa_pass: "{{ ipa_admin_password }}"
     validate_certs: false
@@ -68,7 +68,7 @@
     ip_address: "{{ ansible_default_ipv4.address }}"
     state: absent
     update_dns: true
-    ipa_host: "{{ ipa_server_hostname }}"
+    ipa_host: "{{ ipa_server_hostname }}.{{ ipa_domain }}"
     ipa_user: "{{ ipa_admin_username }}"
     ipa_pass: "{{ ipa_admin_password }}"
     validate_certs: false
@@ -81,7 +81,7 @@
     user: "{{ ipa_admin_username }}"
     password: "{{ ipa_admin_password }}"
     headers:
-      Referer: "https://{{ ipa_server_hostname }}/ipa"
+      Referer: "https://{{ ipa_server_hostname }}.{{ ipa_domain }}/ipa"
       Content-Type: application/json
       Accept: application/json
     body_format: json
@@ -102,7 +102,7 @@
     user: "{{ ipa_admin_username }}"
     password: "{{ ipa_admin_password }}"
     headers:
-      Referer: "https://{{ ipa_server_hostname }}/ipa"
+      Referer: "https://{{ ipa_server_hostname }}.{{ ipa_domain }}/ipa"
       Content-Type: application/json
       Accept: application/json
     body_format: json
