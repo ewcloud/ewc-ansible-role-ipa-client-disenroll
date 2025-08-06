@@ -1,4 +1,7 @@
 # IPA Client Disenrollment Ansible Role
+> 💡 No dependencies are installed in your target environment. Only configuration
+changes are applied to the [ipa-client](https://www.freeipa.org/) package, if and when found
+in your target environment.
 
 This repository contains a configuration template 
 (i.e. an [Ansible Role](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html)) 
@@ -7,15 +10,22 @@ to customize your environment in the
 The template is designed to run on a virtual machine, running an IPA client previously enrolled in your IPA server, such that it:
 * Requests configuration changes to said IPA server for:
     * Stopping user authentication/authorization management (LDAP) to target virtual machine
-    * Deletion of IPA server-internal DNS records referencing  the target virtual 
+    * Deletion of IPA server-internal DNS records referencing the target virtual 
     machine, if and when found
 
 
 ## Copyright and License
->💡 No dependencies are distributed as part of this repository.
 
-See the [LICENSE](./LICENSE) file for licensing information as it pertains to
-files in this repository.
+The provided code and instructions are licensed under the [MIT license](./LICENSE). 
+They are intended to automate the setup of an environment that includes 
+third-party software components.
+The usage and distribution terms of the resulting environment are 
+subject to the individual licenses of those third-party libraries.
+
+Users are responsible for reviewing and complying with the licenses of
+all third-party components included in the environment.
+
+Contact [EUMETSAT](http://www.eumetsat.int) for details on the usage and distribution terms.
 
 ## Usage
 
@@ -81,17 +91,6 @@ ansible-playbook -i inventory.yml playbook.yml
 | ipa_server_hostname | IPA server host name. Example: `ldap`| `string` | n/a | yes |
 | ipa_admin_username  | IPA Directory Manager/Admin username | `string` | n/a | yes |
 | ipa_admin_password | IPA Directory Manager/Admin password | `string` | n/a | yes |
-
-
-## Final Environment
-> 💡 No new dependencies are installed in the final environment. Only configuration
-changes on pre-install packages.
-
-Applying this template will trigger a configuration change on the IPA server against
-which the IPA client (i.e. your target host), was previously registered.
-Upon successful completion, users will no longer be able to use LDAP credentials to
-access the target host, nor will its previous FQDN be resolvable by other hosts in
-the subnet.
 
 ## Changelog
 All notable changes (i.e. fixes, features and breaking changes) are documented 
