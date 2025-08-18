@@ -86,11 +86,11 @@ ansible-playbook -i inventory.yml playbook.yml
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|----------|
-| ipa_domain | The IPA domain name. Example: `<memberstate>-<organization>-<projectname>.ewc` | `string` | n/a | yes |
-| ipa_client_hostname | IPA client host name. Example: `<openstack instance name>` | `string` | n/a | yes |
-| ipa_server_hostname | IPA server host name. Example: `ldap`| `string` | n/a | yes |
-| ipa_admin_username  | IPA Directory Manager/Admin username | `string` | n/a | yes |
-| ipa_admin_password | IPA Directory Manager/Admin password | `string` | n/a | yes |
+| ipa_domain | domain name managed by the existing IPA server. Example: `eumetsat.sandbox.ewc` | `string` | n/a | yes |
+| ipa_client_hostname | hostname of the target vm where the IPA client was be installed. Example: `ipa-client-1` | `string` | n/a | yes |
+| ipa_server_hostname | IPA server hostname. Example: `ipa-server-1`| `string` | n/a | yes |
+| ipa_admin_username  | username of the IPA server administrator account. Example: `ipaadmin` | `string` | n/a | yes |
+| ipa_admin_password | password of the IPA server administrator account. Example: `my-secret-password` | `string` | n/a | yes |
 
 ## Changelog
 All notable changes (i.e. fixes, features and breaking changes) are documented 
