@@ -3,6 +3,13 @@
 All notable changes to this project are documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll/compare/1.0.0...1.1.0) (2025-12-03)
+
+
+### Features
+
+* Test automation support ([#2](https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll/issues/2)) ([6d197a1](https://github.com/ewcloud/ewc-ansible-role-ipa-client-disenroll/commit/6d197a108fdb562349b3f48d22f6d219b120ca09))
+
 # 1.0.0 (2025-09-04)
 
 
